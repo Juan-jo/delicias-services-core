@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record RestaurantMenuProductDTO(
+public record ProductResumeDTO(
         Integer id,
         String name,
         String description,

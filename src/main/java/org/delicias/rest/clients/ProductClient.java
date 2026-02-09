@@ -2,7 +2,7 @@ package org.delicias.rest.clients;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.delicias.common.dto.RestaurantMenuProductDTO;
+import org.delicias.common.dto.ProductResumeDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
@@ -20,5 +20,5 @@ public interface ProductClient {
 
     @GET
     @Path("/batch")
-    List<RestaurantMenuProductDTO> getProductsByIds(@QueryParam("ids") List<Integer> ids);
+    List<ProductResumeDTO> getProductsByIds(@QueryParam("ids") List<Integer> ids);
 }
