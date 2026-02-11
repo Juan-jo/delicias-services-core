@@ -2,7 +2,7 @@ package org.delicias.rest.clients;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.delicias.common.dto.product.ProductResumeDTO;
+import org.delicias.common.dto.restaurant.RestaurantResumeDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
@@ -10,15 +10,15 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import java.util.List;
 
-@Path("/api/products")
-@RegisterRestClient(configKey = "products-service")
+@Path("/api/restaurants")
+@RegisterRestClient(configKey = "restaurants-service")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RegisterProvider(AuthorizationRequestFilter.class)
 @UserTokenPropagation
-public interface ProductClient {
+public interface RestaurantClient {
 
     @GET
     @Path("/batch")
-    List<ProductResumeDTO> getProductsByIds(@QueryParam("ids") List<Integer> ids);
+    List<RestaurantResumeDTO> getRestaurantsByIds(@QueryParam("ids") List<Integer> ids);
 }

@@ -1,4 +1,4 @@
-package org.delicias.common.dto;
+package org.delicias.common.dto.product;
 
 import lombok.Builder;
 

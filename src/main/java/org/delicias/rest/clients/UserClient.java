@@ -2,7 +2,7 @@ package org.delicias.rest.clients;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.delicias.common.dto.UserZoneDTO;
+import org.delicias.common.dto.user.UserZoneDTO;
 
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
