@@ -9,6 +9,7 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import java.util.List;
+import java.util.Set;
 
 @Path("/api/restaurants")
 @RegisterRestClient(configKey = "restaurants-service")
@@ -20,5 +21,5 @@ public interface RestaurantClient {
 
     @GET
     @Path("/batch")
-    List<RestaurantResumeDTO> getRestaurantsByIds(@QueryParam("ids") List<Integer> ids);
+    List<RestaurantResumeDTO> getRestaurantsByIds(@QueryParam("ids") Set<Integer> ids);
 }
