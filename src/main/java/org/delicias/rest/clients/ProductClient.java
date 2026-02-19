@@ -7,11 +7,11 @@ import jakarta.ws.rs.core.Response;
 import org.delicias.common.dto.product.ProductResumeDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
-import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
-import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.*;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -25,9 +25,17 @@ public interface ProductClient {
 
     @GET
     @Path("/batch")
+    @CacheResult(cacheName = "products-batch-cache")
     @Retry(maxRetries = 3, delay = 200)
-    @CircuitBreaker(requestVolumeThreshold = 4, delay = 5000)
-    List<ProductResumeDTO> getProductsByIds(@QueryParam("ids") List<Integer> ids);
+    @CircuitBreaker(
+            requestVolumeThreshold = 10,
+            failureRatio = 0.5,
+            delay = 10000,
+            successThreshold = 3
+    )
+    @Timeout(4000)
+    @Fallback(ProductBatchFallback.class)
+    List<ProductResumeDTO> getProductsByIds(@QueryParam("ids") Set<Integer> ids);
 
     @GET
     @Path("/{productTmplId}/candidate-shoppingcart")
@@ -46,4 +54,15 @@ public interface ProductClient {
     @Retry(maxRetries = 3, delay = 200)
     @CircuitBreaker(requestVolumeThreshold = 4, delay = 5000)
     Response getProductTmplPrices(@QueryParam("ids") Set<Integer> ids);
+
+
+
+
+    class ProductBatchFallback implements FallbackHandler<List<ProductResumeDTO>> {
+        @Override
+        public List<ProductResumeDTO> handle(ExecutionContext context) {
+            // Default return
+            return Collections.emptyList();
+        }
+    }
 }
