@@ -53,16 +53,28 @@ public interface ProductClient {
     @Path("/prices")
     @Retry(maxRetries = 3, delay = 200)
     @CircuitBreaker(requestVolumeThreshold = 4, delay = 5000)
+    @Fallback(ProductPricesFallback.class)
     Response getProductTmplPrices(@QueryParam("ids") Set<Integer> ids);
 
 
 
+    // TODO Fallbacks
 
     class ProductBatchFallback implements FallbackHandler<List<ProductResumeDTO>> {
         @Override
         public List<ProductResumeDTO> handle(ExecutionContext context) {
             // Default return
             return Collections.emptyList();
+        }
+    }
+
+    class ProductPricesFallback implements FallbackHandler<Response> {
+        @Override
+        public Response handle(ExecutionContext context) {
+            return Response.status(Response.Status.PARTIAL_CONTENT)
+                    .header("X-Fallback", true)
+                    .header("X-Fallback-Source", "Circuit-Breaker-Store")
+                    .build();
         }
     }
 }

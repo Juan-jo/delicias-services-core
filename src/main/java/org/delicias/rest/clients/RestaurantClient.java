@@ -3,6 +3,7 @@ package org.delicias.rest.clients;
 import io.quarkus.cache.CacheResult;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.delicias.common.dto.restaurant.RestaurantLatLngDTO;
 import org.delicias.common.dto.restaurant.RestaurantResumeDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
@@ -36,6 +37,21 @@ public interface RestaurantClient {
     @Fallback(RestaurantBatchFallback.class)
     List<RestaurantResumeDTO> getRestaurantsByIds(@QueryParam("ids") Set<Integer> ids);
 
+    @GET
+    @Path("/{restaurantTmplId}/latlng")
+    @Retry(maxRetries = 2, delay = 300)
+    @CircuitBreaker(
+            requestVolumeThreshold = 20,
+            failureRatio = 0.5,
+            delay = 5000,
+            successThreshold = 5
+    )
+    @Timeout(5000)
+    @Fallback(RestaurantLatLngFallback.class)
+    RestaurantLatLngDTO getLatLng(@PathParam("restaurantTmplId") Integer restaurantTmplId);
+
+
+    // TODO Fallbacks
 
     class RestaurantBatchFallback implements FallbackHandler<List<RestaurantResumeDTO>> {
         @Override
@@ -44,4 +60,14 @@ public interface RestaurantClient {
             return Collections.emptyList();
         }
     }
+
+
+    class RestaurantLatLngFallback implements FallbackHandler<RestaurantLatLngDTO> {
+        @Override
+        public RestaurantLatLngDTO handle(ExecutionContext context) {
+            return new RestaurantLatLngDTO(Double.NaN,Double.NaN);
+        }
+    }
+
+
 }

@@ -3,6 +3,7 @@ package org.delicias.rest.clients;
 import io.quarkus.cache.CacheResult;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.delicias.common.dto.user.UserZoneDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
 import org.delicias.rest.filter.UserTokenPropagation;
@@ -34,13 +35,37 @@ public interface UserClient {
     @Fallback(UserZoneFallback.class)
     UserZoneDTO getUserZone(@PathParam("id") UUID userId);
 
+    @GET
+    @Path("/addresses/{addressId}/shopping")
+    @Retry(maxRetries = 3, delay = 200)
+    @CircuitBreaker(requestVolumeThreshold = 4, delay = 5000)
+    @Fallback(AddressFallback.class)
+    Response getUserAddress(@PathParam("addressId") Integer addressId);
+
+
+    @GET
+    @Path("/addresses/default")
+    @Retry(maxRetries = 3, delay = 200)
+    @CircuitBreaker(requestVolumeThreshold = 4, delay = 5000)
+    @Fallback(AddressFallback.class)
+    Response getUserAddressDefault();
+
     class UserZoneFallback implements FallbackHandler<UserZoneDTO> {
         @Override
         public UserZoneDTO handle(ExecutionContext context) {
-            // Retorna una zona por defecto o un objeto que indique "Zona Desconocida"
-            // para no romper el flujo del microservicio que llama.
             return new UserZoneDTO(null, 0);
         }
     }
+
+    class AddressFallback implements FallbackHandler<Response> {
+        @Override
+        public Response handle(ExecutionContext context) {
+            return Response.status(Response.Status.PARTIAL_CONTENT)
+                    .header("X-Fallback", true)
+                    .header("X-Fallback-Source", "Circuit-Breaker-Store")
+                    .build();
+        }
+    }
+
 
 }
