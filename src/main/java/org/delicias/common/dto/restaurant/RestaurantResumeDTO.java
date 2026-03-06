@@ -7,5 +7,6 @@ public record RestaurantResumeDTO(
         Integer id,
         String name,
         String description,
-        String logoUrl
+        String logoUrl,
+        String address
 ) { }
