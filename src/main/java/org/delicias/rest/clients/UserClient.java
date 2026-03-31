@@ -50,6 +50,19 @@ public interface UserClient {
     @Fallback(AddressFallback.class)
     Response getUserAddressDefault();
 
+
+    @GET
+    @Path("/addresses/{addressId}/fields")
+    Response getByFields(
+            @PathParam("addressId") Integer addressId,
+            @QueryParam("fields") String fields
+    );
+
+
+
+
+
+
     class UserZoneFallback implements FallbackHandler<UserZoneDTO> {
         @Override
         public UserZoneDTO handle(ExecutionContext context) {

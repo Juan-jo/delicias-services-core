@@ -3,6 +3,7 @@ package org.delicias.rest.clients;
 import io.quarkus.cache.CacheResult;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.delicias.common.dto.restaurant.RestaurantLatLngDTO;
 import org.delicias.common.dto.restaurant.RestaurantResumeDTO;
 import org.delicias.rest.filter.AuthorizationRequestFilter;
@@ -49,6 +50,14 @@ public interface RestaurantClient {
     @Timeout(5000)
     @Fallback(RestaurantLatLngFallback.class)
     RestaurantLatLngDTO getLatLng(@PathParam("restaurantTmplId") Integer restaurantTmplId);
+
+
+    @GET
+    @Path("/{restaurantTmplId}/fields")
+    Response getByFields(
+            @PathParam("restaurantTmplId") Integer restaurantTmplId,
+            @QueryParam("fields") String fields
+    );
 
 
     // TODO Fallbacks
