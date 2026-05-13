@@ -22,4 +22,9 @@ public interface ShoppingCartClient {
     @Path("/{shoppingCartId}/candidate-order")
     Response getOrderCandidate(
             @PathParam("shoppingCartId") UUID shoppingCartId);
+
+    @DELETE
+    @Path("/{shoppingCartId}")
+    Response deleteShippingCart(
+            @PathParam("shoppingCartId") UUID shoppingCartId);
 }
