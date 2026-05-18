@@ -76,6 +76,15 @@
             <artifactId>quarkus-cache</artifactId>
         </dependency>
 
+        <!--Minio-->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.44.5</version>
+            <scope>compile</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
