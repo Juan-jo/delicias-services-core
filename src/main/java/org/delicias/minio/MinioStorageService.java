@@ -87,10 +87,10 @@ public class MinioStorageService {
 
     }
 
-    public String logoTableUrl(String fileName) {
+    public String smallImage(String fileName) {
 
         return imgproxyUrl +
-                "/insecure/rs:fill:80:80/g:sm/plain/http://minio:9000/" +
+                "/insecure/rs:fit:80:80/g:sm/plain/http://minio:9000/" +
                 bucket +
                 "/" +
                 fileName;
@@ -119,6 +119,15 @@ public class MinioStorageService {
 
         return imgproxyUrl +
                 "/insecure/rs:fill:150:150/g:sm/plain/http://minio:9000/" +
+                bucket +
+                "/" +
+                fileName;
+    }
+
+    public String fitThumbnailUrl(String fileName) {
+
+        return imgproxyUrl +
+                "/insecure/rs:fit:150:150/g:sm/plain/http://minio:9000/" +
                 bucket +
                 "/" +
                 fileName;

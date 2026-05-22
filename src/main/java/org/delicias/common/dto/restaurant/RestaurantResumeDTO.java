@@ -8,5 +8,6 @@ public record RestaurantResumeDTO(
         String name,
         String description,
         String logoUrl,
+        String coverUrl,
         String address
 ) { }
