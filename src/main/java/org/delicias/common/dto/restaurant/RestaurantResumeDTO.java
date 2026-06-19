@@ -9,5 +9,6 @@ public record RestaurantResumeDTO(
         String description,
         String logoUrl,
         String coverUrl,
-        String address
+        String address,
+        StoreType storeType
 ) { }
