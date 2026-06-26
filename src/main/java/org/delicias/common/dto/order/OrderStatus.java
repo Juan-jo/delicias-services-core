@@ -1,6 +1,8 @@
 package org.delicias.common.dto.order;
 
 public enum OrderStatus {
+    CREATED,
+    PENDING_PAYMENT,
     ORDERED,
     ACCEPTED,
     COOKING,
